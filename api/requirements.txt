@@ -1,0 +1,7 @@
+networkx
+numpy
+pandas
+fastapi
+transformers
+torch
+inseq
