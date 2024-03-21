@@ -189,8 +189,6 @@ console.log(json_data['col_names'])
 console.log(json_data['row_names'])
 
 
-let num_rows = json_data['row_names'].length
-let num_cols = json_data['col_names'].length
 renderTokens(attribution_scores, json_data['row_names']);
 
 

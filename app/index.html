@@ -15,11 +15,13 @@
 </head>
 <body style="padding-top: 1%" class="h-screen">
     <header style="padding-bottom: 5%; padding-left:1%">
-        <h1 class="text-3xl">LangTree</h1>
+        <h1 class="text-3xl" onClick="window.location.reload()">LangTree</h1>
         <p>Tree Based Mechanistic Interpretability for Large Language Models</p>
     </header>
-    <div  id="token-container"></div>
-    <div id="tooltip"></div>  
+    <section style="height:10%">
+      <div style="margin:auto; width:50%; text-align: center; padding-bottom: 4%;"  id="token-container"></div>
+      <div id="tooltip"></div>  
+    </section>
     <section id="main-ui" style="padding-left:1%">
 
         <section id="text-container" style="width:70%; margin:auto">
@@ -118,7 +120,7 @@
                 <dialog id="my_modal_2" class="modal">
                     <div class="modal-box">
                       <h3 class="font-bold text-lg">ISC License</h3>
-                      <p class="py-4">ISC License
+                      <p class="py-4 text-primary-content">ISC License
 
                         Copyright <YEAR> <OWNER>
                         

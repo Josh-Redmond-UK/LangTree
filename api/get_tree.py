@@ -16,9 +16,6 @@ tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
 model = GPT2LMHeadModel.from_pretrained(model_string)
 attribution_model = inseq.load_model(model, "saliency")
 inputs = tokenizer(input_text, return_tensors="pt")
-#outputs = model(**inputs)
-#model_path = 'openai-community/gpt2'
-#generator = pipeline("text-generation", model=model_path)
 
 
 tokenizer.pad_token_id = tokenizer.eos_token_id
