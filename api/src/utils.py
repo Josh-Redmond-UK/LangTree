@@ -44,10 +44,11 @@ def get_next_topk_beams(text, model, tokenizer, next_tokens = 1, k=5):
 
 
 class treeNode:
-    def __init__(self, text, depth=0):
+    def __init__(self, text, depth=0, new_tokens=""):
         self.depth = depth
         self.text = text
         self.children = []
+        self.new_tokens = new_tokens
     def add_child(self, obj):
         self.children.append(obj)
     
@@ -58,7 +59,7 @@ def tree_dfs(root, model, tokenizer, k=5, max_depth=20):
         return
     new_texts = get_next_topk_beams(root.text, model, tokenizer, 2, k)
     for t in new_texts:
-        child = treeNode(t, root.depth+1)
+        child = treeNode(t, root.depth+1, new_tokens=t[len(root.text):])
         root.add_child(child)
         tree_dfs(child, model, tokenizer, k, max_depth)
 
@@ -80,7 +81,7 @@ def tree_bfs(root, model, tokenizer, k=2, max_depth=3):
 def tree_to_dict(root_node):
 
     node_dict = {'text': root_node.text, 
-                 
+                 'disp_text': root_node.new_tokens,
                  'depth': root_node.depth,
                  'children': [tree_to_dict(x) for x in root_node.children]}
     return node_dict
@@ -94,13 +95,13 @@ def attribute_node(input_text, node_text, model):
     att = model.attribute(input_text, node_text)
     df = pd.DataFrame(att.get_scores_dicts()[0]['target_attributions'])
 
-    column_names = [x[1].replace('Ġ', '') for x in df.columns.values]
-    row_names = [x[1].replace('Ġ', '') for x in df.index.values]
+    column_names = [x[1].replace('Ġ', ' ') for x in df.columns.values]
+    row_names = [x[1].replace('Ġ', ' ') for x in df.index.values]
 
     vals = np.array(df.values)
-    vals = np.ascontiguousarray(np.nan_to_num(vals))
+    vals = np.ascontiguousarray(np.nan_to_num(vals)).squeeze().T.tolist()
 
 
-    attribution_payload = {"col_names": column_names, "row_names": row_names,"data": base64.b64encode(vals).decode("utf-8")}
+    attribution_payload = {"col_names": column_names, "row_names": row_names,"data": vals}
 
-    return attribution_payload
+    return json.dumps(attribution_payload)

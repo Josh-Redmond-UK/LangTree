@@ -2,6 +2,7 @@ from fastapi import FastAPI, HTTPException
 from src.utils import *
 from transformers import pipeline, GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
 import inseq
+from fastapi.middleware.cors import CORSMiddleware
 
 #default globals
 global tokenizer_string
@@ -15,18 +16,34 @@ model = GPT2LMHeadModel.from_pretrained(model_string)
 attribution_model = inseq.load_model(model, "saliency")
 
 app = FastAPI()
+origins = [
+    "http://localhost",
+    "http://localhost:8080",
+    "http://127.0.0.1:5500"
+]
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=origins,
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
+ 
 
 valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-community/gpt2']}
 
 
 @app.get("/api/tree/")
 def get_tree(text, k=2, max_depth=3):
-    root_node = treeNode(text)
+    root_node = treeNode(text, new_tokens=text)
     tree_dfs(root_node, model, tokenizer, k=k, max_depth=max_depth)
     return serialize_tree(root_node)
 
-@app.get("api/attribute_text/")
+@app.get("/api/attribute_text/")
 def attribute_text(input_text, node_text):
+    print(input_text)
+    print(node_text)
     return attribute_node(input_text, node_text, attribution_model)
     
 

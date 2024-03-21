@@ -9,26 +9,31 @@
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://kit.fontawesome.com/ec40551687.js" crossorigin="anonymous"></script>
+    <script src="https://code.jquery.com/jquery-3.7.1.js" integrity="sha256-eKhayi8LEQwp4NKxN+CfCh+3qOVUtJn3QNZ0TciWLP4=" crossorigin="anonymous"></script>
+    <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
+    <script src="scripts/main_tools.js"></script>
 </head>
 <body style="padding-top: 1%" class="h-screen">
-    <section style="padding-left:1%">
-        <header style="padding-bottom: 5%">
-            <h1 class="text-3xl">LangTree</h1>
-            <p>Tree Based Mechanistic Interpretability for Large Language Models</p>
-        </header>
+    <header style="padding-bottom: 5%; padding-left:1%">
+        <h1 class="text-3xl">LangTree</h1>
+        <p>Tree Based Mechanistic Interpretability for Large Language Models</p>
+    </header>
+    <div  id="token-container"></div>
+    <div id="tooltip"></div>  
+    <section id="main-ui" style="padding-left:1%">
+
         <section id="text-container" style="width:70%; margin:auto">
             <section id="Text Options" style="width:60%; margin: auto; height:100%">
                 <p class="text-xl pb-2">Enter text to begin.</p>
                 <label class="input input-bordered flex flex-row">
-                    <input type="text" class="grow" placeholder="Enter Text"/>
-                    <button class="btn" id="go-button" >Start</button>
+                    <input type="text" id="user-text" class="grow" placeholder="Enter Text"/>
+                    <button class="btn" id="go-button" onclick="get_tree(getElementById('user-text').value)" >Start</button>
                 </label>
                 <div class="divider">Examples</div>
                 <ul id="Examples" class="space-y-0.5">
-                    <li><button class="btn btn-outline btn-primary" style="width:100%">Once upon a time there was</button></li>
-                    <li><button class="btn btn-outline btn-primary" style="width:100%">In computer science, Kolmogorov complexity is</button></li>
-                    <li><button class="btn btn-outline btn-primary" style="width:100%">Q: What is the history of the tower of London? <br>
-                    A: </button></li>
+                    <li><button id="example-1" onclick="get_tree('Once upon a time there was')" class="btn btn-outline btn-primary" style="width:100%">Once upon a time there was</button></li>
+                    <li><button id="example-2" onclick="get_tree('In computer science, Kolmogorov complexity is')" class="btn btn-outline btn-primary" style="width:100%">In computer science, Kolmogorov complexity is</button></li>
+                    <li><button id="example-3" onclick="get_tree('Q: What is the history of the tower of London? <br> A: ')" class="btn btn-outline btn-primary" style="width:100%">Q: What is the history of the tower of London? <br> A: </button></li>
 
 
                 </ul>
@@ -86,17 +91,49 @@
 
     <footer class="p-10 bg-neutral text-neutral-content flex justify-start" style="bottom:0; position:fixed; width:100%">
         <section id="related-resources">
-            <h2>Related Resources</h2>
+            <h2 class="text-xl font-bold pr-3">About and Links</h2>
             <ul>
-                <li><a href="#">About LangTree</a></li>
-                <li><a href="#">InSeq Paper</a></li>
-                <li><a href="#">InSeq Repository</a></li>
-                <li><a href="#">LangTree Repository</a></li>
+                <li><a href="#" onclick="my_modal_1.showModal()">About LangTree</a></li>
+                <dialog id="my_modal_1" class="modal">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">About</h3>
+                      <p class="py-4">LangTree is a project for visualising and analysing the potential generation paths of Large Language Models (LLMs). For a given text string, it can help to understand what paths the model might take in generation and uses the InSeq package to analyse how prior nodes in that branch of the tree contributed to the final string. It was created by Josh Redmond, and was inspired by several twitter posts that posted demos of similar tree-based apps for visualising LLM generations (I cannot find them to give proper credit, if you have made one of them please email me!)</p>
+                      <div class="modal-action">
+                        <form method="dialog">
+                          <!-- if there is a button in form, it will close the modal -->
+                          <button class="btn">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>                  
+                <li><a href="https://arxiv.org/abs/2302.13942">InSeq Paper</a></li>
+                <li><a href="https://inseq.org/en/latest/">InSeq Repository</a></li>
+                <li><a href="https://github.com/Josh-Redmond-UK/LangTree">LangTree Repository</a></li>
             </ul>
         </section>
         <ul>
+            <br>
             <li><a href="mailto:josh@joshredmond.com">Contact or Feedback</a></li>
-            <li><a href="#">Disclaimer</a></li>
+            <li><a href="#" onclick="my_modal_2.showModal()">License</a>
+                <dialog id="my_modal_2" class="modal">
+                    <div class="modal-box">
+                      <h3 class="font-bold text-lg">ISC License</h3>
+                      <p class="py-4">ISC License
+
+                        Copyright <YEAR> <OWNER>
+                        
+                        Permission to use, copy, modify, and/or distribute this software for any purpose with or without fee is hereby granted, provided that the above copyright notice and this permission notice appear in all copies.
+                        
+                        THE SOFTWARE IS PROVIDED "AS IS" AND THE AUTHOR DISCLAIMS ALL WARRANTIES WITH REGARD TO THIS SOFTWARE INCLUDING ALL IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS. IN NO EVENT SHALL THE AUTHOR BE LIABLE FOR ANY SPECIAL, DIRECT, INDIRECT, OR CONSEQUENTIAL DAMAGES OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS, WHETHER IN AN ACTION OF CONTRACT, NEGLIGENCE OR OTHER TORTIOUS ACTION, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE OF THIS SOFTWARE.</p>
+                      <div class="modal-action">
+                        <form method="dialog">
+                          <!-- if there is a button in form, it will close the modal -->
+                          <button class="btn">Close</button>
+                        </form>
+                      </div>
+                    </div>
+                  </dialog>                  
+            </li>
         </ul>
     </footer>
 

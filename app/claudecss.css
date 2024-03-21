@@ -110,3 +110,28 @@ footer ul li a {
 footer ul li a:hover {
     text-decoration: underline;
 }
+
+.token {
+    display: inline-block;
+    padding: 4px 8px;
+    text-align: center;
+    width: 70%;
+    margin: auto;
+    left:30%;
+    background-color: #f0f0f0;
+    border-radius: 4px;
+    cursor: pointer;
+  }
+
+  .token.highlight {
+    background-color: #9614ad;
+  }
+
+  #tooltip {
+    display: none;
+    position: absolute;
+    background-color: #000;
+    color: #fff;
+    padding: 8px;
+    border-radius: 4px;
+  }
