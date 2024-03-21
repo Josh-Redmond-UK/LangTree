@@ -8,6 +8,7 @@
     <script src="https://cdn.tailwindcss.com"></script>
     <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
     <script src="https://cdn.tailwindcss.com"></script>
+    <script src="https://kit.fontawesome.com/ec40551687.js" crossorigin="anonymous"></script>
 </head>
 <body style="padding-top: 1%" class="h-screen">
     <section style="padding-left:1%">
@@ -15,25 +16,62 @@
             <h1 class="text-3xl">LangTree</h1>
             <p>Tree Based Mechanistic Interpretability for Large Language Models</p>
         </header>
+        <section id="text-container" style="width:70%; margin:auto">
+            <section id="Text Options" style="width:60%; margin: auto; height:100%">
+                <p class="text-xl pb-2">Enter text to begin.</p>
+                <label class="input input-bordered flex flex-row">
+                    <input type="text" class="grow" placeholder="Enter Text"/>
+                    <button class="btn" id="go-button" >Start</button>
+                </label>
+                <div class="divider">Examples</div>
+                <ul id="Examples" class="space-y-0.5">
+                    <li><button class="btn btn-outline btn-primary" style="width:100%">Once upon a time there was</button></li>
+                    <li><button class="btn btn-outline btn-primary" style="width:100%">In computer science, Kolmogorov complexity is</button></li>
+                    <li><button class="btn btn-outline btn-primary" style="width:100%">Q: What is the history of the tower of London? <br>
+                    A: </button></li>
 
-        <section id="Generation Paramters" style="width:20%; margin: auto; height:100%">
-                <textarea class="input input-bordered w-full max-w-xs" id="text-input" placeholder="Enter Text"></textarea>
-                <button class="btn join-item" id="go-button" style="width: 100%;">Go</button>
+
+                </ul>
+            </section>
         </section>
         <div class="drawer">
             <input id="my-drawer" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content">
               <!-- Page content here -->
-              <label for="my-drawer" class="btn btn-primary drawer-button" style="position:fixed; bottom:50%">Options</label>
+                <label for="my-drawer" class="btn btn-primary drawer-button mask mask-circle" style="position:fixed; bottom:50%">
+                    <i class="fa-solid fa-bars"></i>
+                </label>
             </div> 
             <div class="drawer-side">
               <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
               <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
               <h2>Parameters</h2>
-                <ul>
-                    <li><a href="#generation-step-controls">Generation Step Controls</a></li>
-                    <li><a href="#model-parameter-settings">Model and Parameter Settings</a></li>
-                    <li><a href="#explanation-interpretation">Explanation and Interpretation</a></li>
+                <ul class="collapse">
+                    <li><a href="#generation-step-controls">Model Settings</a>
+                        <select class="select w-full max-w-xs">
+                            <option disabled selected>Select Model</option>
+                            <option>GPT-2</option>
+                            <option>BLOOM</option>
+                            <option>gemma-7b</option>
+
+                          </select>                          
+                    </li>
+                    <li>
+                        <a href="#model-parameter-settings">Generation Settings</a>
+                        <label for="quantity">K</label>
+                        <input type="number" id="k-input" value="3" name="k" min="1" max="30">
+                        <label for="quantity">Max Additional Tokens</label>
+                        <input type="number" id="n-tokens-input" name="n-tokens" value = 3 min="1" max="30">
+                    </li>
+                    <li>
+                        <a href="#explanation-interpretation">Explanation and Interpretation</a>
+                        <select class="select w-full max-w-xs">
+                            <option disabled selected>Attribution Method</option>
+                            <option>LIME</option>
+                            <option>Saliency</option>
+                          </select>                          
+
+                    </li>
                 </ul>
               </ul>
             </div>
