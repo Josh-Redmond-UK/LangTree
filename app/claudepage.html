@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Model Token Visualization</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/tailwindcss/2.0.2/tailwind.min.css" rel="stylesheet">
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://cdn.jsdelivr.net/npm/daisyui@4.7.3/dist/full.min.css" rel="stylesheet" type="text/css" />
+    <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body style="padding-top: 1%" class="h-screen">
+    <section style="padding-left:1%">
+        <header style="padding-bottom: 5%">
+            <h1 class="text-3xl">LangTree</h1>
+            <p>Tree Based Mechanistic Interpretability for Large Language Models</p>
+        </header>
+
+        <section id="Generation Paramters" style="width:20%; margin: auto; height:100%">
+                <textarea class="input input-bordered w-full max-w-xs" id="text-input" placeholder="Enter Text"></textarea>
+                <button class="btn join-item" id="go-button" style="width: 100%;">Go</button>
+        </section>
+        <div class="drawer">
+            <input id="my-drawer" type="checkbox" class="drawer-toggle" />
+            <div class="drawer-content">
+              <!-- Page content here -->
+              <label for="my-drawer" class="btn btn-primary drawer-button" style="position:fixed; bottom:50%">Options</label>
+            </div> 
+            <div class="drawer-side">
+              <label for="my-drawer" aria-label="close sidebar" class="drawer-overlay"></label>
+              <ul class="menu p-4 w-80 min-h-full bg-base-200 text-base-content">
+              <h2>Parameters</h2>
+                <ul>
+                    <li><a href="#generation-step-controls">Generation Step Controls</a></li>
+                    <li><a href="#model-parameter-settings">Model and Parameter Settings</a></li>
+                    <li><a href="#explanation-interpretation">Explanation and Interpretation</a></li>
+                </ul>
+              </ul>
+            </div>
+          </div>
+
+
+
+        <aside>
+
+        </aside>
+    </section>
+
+    <footer class="p-10 bg-neutral text-neutral-content flex justify-start" style="bottom:0; position:fixed; width:100%">
+        <section id="related-resources">
+            <h2>Related Resources</h2>
+            <ul>
+                <li><a href="#">About LangTree</a></li>
+                <li><a href="#">InSeq Paper</a></li>
+                <li><a href="#">InSeq Repository</a></li>
+                <li><a href="#">LangTree Repository</a></li>
+            </ul>
+        </section>
+        <ul>
+            <li><a href="mailto:josh@joshredmond.com">Contact or Feedback</a></li>
+            <li><a href="#">Disclaimer</a></li>
+        </ul>
+    </footer>
+
+    <script src="app.js"></script>
+</body>
+</html>
