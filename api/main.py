@@ -37,7 +37,7 @@ valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-commun
 @app.get("/api/tree/")
 def get_tree(text, k=2, max_depth=3):
     root_node = treeNode(text, new_tokens=text)
-    tree_dfs(root_node, model, tokenizer, k=k, max_depth=max_depth)
+    tree_dfs(root_node, model, tokenizer, k=k, max_depth=7)
     return serialize_tree(root_node)
 
 @app.get("/api/attribute_text/")

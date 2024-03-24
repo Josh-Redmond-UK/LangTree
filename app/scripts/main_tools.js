@@ -8,7 +8,7 @@ async function get_tree(text) {
     user_text = text
     var main_ui = document.getElementById('main-ui')
     main_ui.innerHTML = '<div style="bottom:50%; width:50%; text-align: center; margin:auto"> <h1>Loading...</h1> </div>'
-    const response = await fetch(`http://127.0.0.1:8000/api/tree/?text=${value}&?k=2`);
+    const response = await fetch(`http://127.0.0.1:8000/api/tree/?text=${value}&?k=2  `);
     const data = await response.json();
     console.log(data);
 
@@ -64,12 +64,13 @@ function renderTree(rootNode, {
     if (typeof curve !== "function") throw new Error(`Unsupported curve`);
   
     const svg = d3.create("svg")
-      .attr("viewBox", [-dy * padding / 2, x0 - dx, width, height])
-      .attr("width", width)
-      .attr("height", height)
-      .attr("style", "max-width: 100%; height: auto; height: intrinsic;")
+      .attr("viewBox", [-dy * padding / 2, x0 - dx, 1000, 1000])
+      .attr("style", "max-width: 100%; height: auto; height: intrinsic overflow-x: auto; white-space: nowrap;")
       .attr("font-family", "sans-serif")
-      .attr("font-size", 10);
+      .attr("font-size", 10)
+      .style("overflow-x", "auto")
+      .style("white-space", "nowrap")
+      .style("overflow-y", "auto");
   
     svg.append("g")
       .attr("fill", "none")
