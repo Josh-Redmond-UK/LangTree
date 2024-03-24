@@ -17,11 +17,14 @@ async function get_tree(text) {
       const treeElement = renderTree(rootNode, {
         width: window.innerWidth,
         height: 600,
+        k: 2,
+        depth: 7,
         fill: "#3498db",
         stroke: "#2980b9"
       });
       //main_ui.innerHTML = treeElement.outerHTML
-      main_ui.innerHTML = ""
+      main_ui.innerHTML = "";
+      main_ui.style.overflow = "auto";
       main_ui.appendChild(treeElement);
 
 }
@@ -30,8 +33,10 @@ async function get_tree(text) {
 
 function renderTree(rootNode, {
     tree = d3.tree,
+    k = 2,
+    depth = 2,
     width = 640,
-    height = 400,
+    height = 1200,
     r = 3,
     padding = 1,
     fill = "#999",
@@ -45,7 +50,7 @@ function renderTree(rootNode, {
     const root = d3.hierarchy(rootNode, d => d.children);
   
     // Compute the layout.
-    const dx = 10;
+    const dx = 20;
     const dy = width / (root.height + padding);
     tree().nodeSize([dx, dy])(root);
   
@@ -64,13 +69,15 @@ function renderTree(rootNode, {
     if (typeof curve !== "function") throw new Error(`Unsupported curve`);
   
     const svg = d3.create("svg")
-      .attr("viewBox", [-dy * padding / 2, x0 - dx, 1000, 1000])
-      .attr("style", "max-width: 100%; height: auto; height: intrinsic overflow-x: auto; white-space: nowrap;")
+      .attr("viewBox", [-dy * padding / 2, x0 - dx, width, dy*((depth)**(k+1))])
+      .attr("style", "max-width: 100%; height: auto; overflow: auto;")
       .attr("font-family", "sans-serif")
       .attr("font-size", 10)
-      .style("overflow-x", "auto")
       .style("white-space", "nowrap")
-      .style("overflow-y", "auto");
+      .style("overflow", "auto")
+      //.style("width", "100%")
+      //.style("height", "600px");
+    
   
     svg.append("g")
       .attr("fill", "none")
