@@ -99,7 +99,7 @@ def attribute_node(input_text, node_text, model):
     row_names = [x[1].replace('Ġ', ' ') for x in df.index.values]
 
     vals = np.array(df.values)
-    vals = np.ascontiguousarray(np.nan_to_num(vals)).squeeze().T.tolist()
+    vals = np.ascontiguousarray(np.nan_to_num(vals)).squeeze().tolist()
 
 
     attribution_payload = {"col_names": column_names, "row_names": row_names,"data": vals}

@@ -161,14 +161,15 @@ function renderTree(rootNode, {
   function highlightAffectedTokens(tokenIndex, data, tokens) {
     const tokenElements = document.querySelectorAll('.token');
     tokenElements.forEach((element, index) => {
-      if (index < tokenIndex) {
         const salienceScore = data[tokenIndex][index];
+        if (salienceScore > 0){
         element.classList.toggle('highlight', salienceScore > 0);
         element.style.backgroundColor = `rgba(54, 47, 237, ${salienceScore})`;
-      } else {
+        }
+        else{
         element.classList.remove('highlight');
-        element.style.backgroundColor = '';
-      }
+        element.style.backgroundColor = '';}
+      
     });
   }
 
