@@ -52,6 +52,8 @@ function renderTree(rootNode, {
     // Compute the layout.
     const dx = 20;
     const dy = width / (root.height + padding);
+    console.log("dy", dy)
+    console.log("root height", root.height)
     tree().nodeSize([dx, dy])(root);
   
     // Center the tree.
@@ -69,15 +71,16 @@ function renderTree(rootNode, {
     if (typeof curve !== "function") throw new Error(`Unsupported curve`);
   
     const svg = d3.create("svg")
-      .attr("viewBox", [-dy * padding / 2, x0 - dx, width, dy*((depth)**(k+1))])
+      .attr("viewBox", [-dy * padding / 2, x0 - dx, width, (31)*(k**(depth+1))])
       .attr("style", "max-width: 100%; height: auto; overflow: auto;")
       .attr("font-family", "sans-serif")
       .attr("font-size", 10)
+      .style("overflow-x", "auto")
       .style("white-space", "nowrap")
       .style("overflow", "auto")
       //.style("width", "100%")
       //.style("height", "600px");
-    
+    console.log("height", (k**(depth)))
   
     svg.append("g")
       .attr("fill", "none")
@@ -114,6 +117,10 @@ function renderTree(rootNode, {
       .on("click", (event, d) => {
         // Callback function when a node's text is clicked
         console.log("Clicked node text:", d.data.text);
+        console.log("Y location:", d.y);
+        console.log("x location:", d.x);
+
+
         attribute_text(user_text, d.data.text)
 
     });
