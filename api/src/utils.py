@@ -14,23 +14,7 @@ class treeNode:
     def add_child(self, obj):
         self.children.append(obj)
 
-def get_next_topk_greedy(text, model, tokenizer, temperature=1.0, k=5):
-    tokenizer.pad_token_id = tokenizer.eos_token_id
-    inputs = tokenizer(text, return_tensors="pt")
-    outputs = model(**inputs)
-    next_token_logits = outputs.logits[:, -1]
-    # scale using temperature
-    next_token_logits = next_token_logits / temperature
-    
 
-    next_token_probs = torch.nn.functional.softmax(next_token_logits, dim=-1)
-    top_k_tokens = torch.topk(next_token_probs, k)
-    new_texts = []
-
-    for idx, t in enumerate(top_k_tokens[1][0]):
-        new_texts.append(text + tokenizer.decode(t))
-
-    return new_texts
 
 
 def get_next_topk_beams(text, model, tokenizer, next_tokens = 1, k=5):
@@ -68,7 +52,6 @@ def tree_bfs(root, model, tokenizer, k=2, max_depth=3):
     queue = [root]
     while queue:
         node = queue.pop(0)
-        print("depth", node.depth, node.text)
         if node.depth < max_depth:
             new_texts = get_next_topk_beams(node.text, model, tokenizer, 2, k)
             for t in new_texts:

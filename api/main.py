@@ -1,6 +1,6 @@
 from fastapi import FastAPI, HTTPException
 from src.utils import *
-from transformers import pipeline, GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
+from transformers import  GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
 import inseq
 from fastapi.middleware.cors import CORSMiddleware
 
