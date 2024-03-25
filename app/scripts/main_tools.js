@@ -6,9 +6,11 @@ async function get_tree(text) {
     console.log(text)
     const value = text
     user_text = text
+    let k = document.getElementById('k-input').value
+    let depth = document.getElementById('depth-input').value
     var main_ui = document.getElementById('main-ui')
     main_ui.innerHTML = '<div style="bottom:50%; width:50%; text-align: center; margin:auto"> <h1>Loading...</h1> </div>'
-    const response = await fetch(`http://127.0.0.1:8000/api/tree/?text=${value}&?k=2  `);
+    const response = await fetch(`http://127.0.0.1:8000/api/tree/?text=${value}&k=${k}&max_depth=${depth}`);
     const data = await response.json();
     console.log(data);
 
