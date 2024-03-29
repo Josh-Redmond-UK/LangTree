@@ -3,6 +3,7 @@ from src.utils import *
 from transformers import  GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
 import inseq
 from fastapi.middleware.cors import CORSMiddleware
+from mangum import Mangum
 
 #default globals
 global tokenizer_string
@@ -15,7 +16,11 @@ tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
 model = GPT2LMHeadModel.from_pretrained(model_string)
 attribution_model = inseq.load_model(model, "saliency")
 
+
+
 app = FastAPI()
+
+
 origins = [
     "http://localhost",
     "http://localhost:8080",
@@ -29,10 +34,15 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
+
+handler = Mangum(app)
  
 
 valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-community/gpt2']}
 
+@app.get("/")
+async def root():
+    return {"message": "LangTree API is running!"}
 
 @app.get("/api/tree/")
 def get_tree(text, k, max_depth):
