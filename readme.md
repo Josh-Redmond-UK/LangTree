@@ -9,4 +9,4 @@ LangTree is a single page web app and API, with the front end using D3.js and Da
 1. Create a conda or venv environment with python 3.10
 2. Install all the dependencies as listed in api/requirements.txt
 3. In terminal, navigate to the api folder and run 'uvicorn main:app --reload'
-4. Open app/index.html in your browser of choice (ideally run it from a local webserver)
+4. Open index.html in your browser of choice (ideally run it from a local webserver)
