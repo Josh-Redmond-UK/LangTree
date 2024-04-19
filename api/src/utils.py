@@ -1,20 +1,7 @@
-import transformers
 from transformers import AutoModel, AutoTokenizer
-import torch
 import pandas as pd
 import numpy as np 
 import json 
-import base64
-
-class treeNode:
-    def __init__(self, text, depth=0):
-        self.depth = depth
-        self.text = text
-        self.children = []
-    def add_child(self, obj):
-        self.children.append(obj)
-
-
 
 
 def get_next_topk_beams(text, model, tokenizer, next_tokens = 1, k=5):
