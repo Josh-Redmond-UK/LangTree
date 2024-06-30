@@ -6,6 +6,8 @@ from transformers import  GPT2Tokenizer, GPT2LMHeadModel
 import inseq
 from fastapi.middleware.cors import CORSMiddleware
 import time
+from fastapi.middleware import Middleware
+
 
 #default globals
 global tokenizer_string
