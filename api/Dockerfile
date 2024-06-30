@@ -1,8 +1,7 @@
-FROM public.ecr.aws/lambda/python:3.10
+FROM --platform=linux/amd64 python:3
 
 
 WORKDIR /app
-
 
 COPY requirements.txt .
 
@@ -12,4 +11,4 @@ COPY . .
 
 EXPOSE 8080
 
-CMD ["uvicorn", "main:app", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["fastapi", "run", "main.py", "--port", "8080"]

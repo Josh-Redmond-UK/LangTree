@@ -1,8 +1,6 @@
-uvicorn
-transformers
 fastapi
+transformers[cpu]
 inseq
 mangum
-torch
-numpy
 pandas
+numpy

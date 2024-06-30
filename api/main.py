@@ -2,7 +2,7 @@ from fastapi import FastAPI, HTTPException, WebSocket
 from fastapi.websockets import WebSocketDisconnect
 import asyncio
 from src.utils import *
-from transformers import  GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
+from transformers import  GPT2Tokenizer, GPT2LMHeadModel
 import inseq
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
@@ -66,7 +66,7 @@ def get_valid_params():
     return valid_params
 
 @app.post("api/update_params")
-def update_paarams(tokenizer_string, model_string):
+def update_params(tokenizer_string, model_string):
     if tokenizer_string in valid_params['tokenizers'] and model_string in valid_params['models']:
         tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
         model = GPT2LMHeadModel.from_pretrained(model_string)
