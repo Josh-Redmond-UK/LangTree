@@ -18,25 +18,24 @@ tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
 model = GPT2LMHeadModel.from_pretrained(model_string)
 attribution_model = inseq.load_model(model, "saliency")
 
-print("app loaded1 ")
-
-app = FastAPI()
 
 
-origins = [
-    "http://localhost",
-    "http://localhost:8080",
-    "http://127.0.0.1:5500"
-]
 
-app.add_middleware(
-    CORSMiddleware,
-    allow_origins=['*'],
-    allow_credentials=True,
-    allow_methods=["*"],
-    allow_headers=["*"],
-)
- 
+middleware = [
+    Middleware(
+        CORSMiddleware,
+        allow_origins=['*', 'https://josh-redmond-uk.github.io', 'https://josh-redmond-uk.github.io/'],
+        allow_credentials=True,
+        allow_methods=['*'],
+        allow_headers=['*']
+    )]
+
+
+
+app = FastAPI(middleware=middleware)
+
+print("app loaded!")
+
 
 valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-community/gpt2']}
 
