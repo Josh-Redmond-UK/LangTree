@@ -28,6 +28,10 @@ async function get_tree(text) {
         socket.addEventListener("message", (event) => {console.log("received message using listener")})
         const input_section = document.getElementById('text-container');
         input_section.style.display = 'none';
+        const footer = document.getElementById('page_footer');
+        footer.style.display = 'none';
+        const drawer = document.getElementById('drawer_container');
+        drawer.style.display = 'none';
 
 
     };

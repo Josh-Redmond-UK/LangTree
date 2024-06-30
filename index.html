@@ -14,7 +14,8 @@
     <script src="https://cdn.jsdelivr.net/npm/d3@7"></script>
     <script src="scripts/main_tools.js"></script>
 </head>
-<body style="padding-top: 1%; height:100%" class="h-screen">
+<body style="height:100%" class="h-screen">
+  <div id="main-content-container" style="padding-top: 1%; height:80%" >
     <header style="padding-bottom: 5%; padding-left:1%">
         <h1 class="text-3xl" onClick="window.location.reload()">LangTree</h1>
         <p>Tree Based Interpretability for Large Language Models</p>
@@ -42,7 +43,7 @@
                 </ul>
             </section>
         </section>
-        <div class="drawer">
+        <div id="drawer_container" class="drawer">
             <input id="my-drawer" type="checkbox" class="drawer-toggle" />
             <div class="drawer-content">
               <!-- Page content here -->
@@ -80,8 +81,8 @@
 
         </aside>
     </section>
-
-    <footer class="p-10 bg-neutral text-neutral-content flex justify-start" style="margin-top:10%; position:fixed; height:100%; width:100%">
+  </div>
+    <footer id = "page_footer" class="p-10 bg-neutral text-neutral-content flex justify-start" style="margin-top:10%; position:fixed; height:100%; width:100%">
         <section id="related-resources">
             <h2 class="text-xl font-bold pr-3">About and Links</h2>
             <ul>
