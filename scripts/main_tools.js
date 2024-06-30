@@ -1,37 +1,112 @@
+
+window.onload = init;
+
+function init(){
+
 let user_text = ""
 
-async function get_tree(text) {
-    //const textBox = document.getElementById('textboxId');
-    //const text = "once there"
-    console.log(text)
-    const value = text
-    user_text = text
-    let k = document.getElementById('k-input').value
-    let depth = document.getElementById('depth-input').value
-    var main_ui = document.getElementById('main-ui')
-    main_ui.innerHTML = '<div style="bottom:50%; width:50%; text-align: center; margin:auto"> <h1>Loading...</h1> </div>'
-    const response = await fetch(`http://127.0.0.1:8000/api/tree/?text=${value}&k=${k}&max_depth=${depth}`);
-    const data = await response.json();
-    console.log(data);
+let socket;
 
-    const rootNode = JSON.parse(data)
- 
-      const treeElement = renderTree(rootNode, {
+async function get_tree(text) {
+    const k = document.getElementById('k-input').value;
+    const depth = document.getElementById('depth-input').value;
+    user_text = text;
+
+    //var main_ui = document.getElementById('main-ui');
+    //main_ui.innerHTML = '<div style="bottom:50%; width:50%; text-align: center; margin:auto"> <h1>Loading...</h1> </div>';
+
+    // Close existing socket if it exists
+    if (socket) {
+        socket.close();
+    }
+
+    // Create a new WebSocket connection
+    socket = new WebSocket(`ws://127.0.0.1:8000/ws/tree?text=${encodeURIComponent(text)}&k=${k}&max_depth=${depth}`);
+
+    socket.onopen = function(e) {
+        console.log("WebSocket connection established");
+        socket.addEventListener("message", (event) => {console.log("received message using listener")})
+
+
+    };
+
+
+  socket.onmessage = function(event) {
+    console.log("received message")
+      const message = JSON.parse(event.data);
+      if (message.type === "node") {
+          updateTree(message.data);
+      } else if (message.type === "complete") {
+          console.log("Tree generation complete");
+      }
+  };
+
+    socket.onerror = function(error) {
+        console.error(`WebSocket Error: ${error}`);
+    };
+
+    socket.onclose = function(event) {
+        if (event.wasClean) {
+            console.log(`WebSocket connection closed cleanly, code=${event.code}, reason=${event.reason}`);
+        } else {
+            console.error('WebSocket connection died');
+        }
+    };
+}
+
+
+
+
+
+
+let rootNode = null;
+
+function updateTree(nodeData) {
+    if (!rootNode) {
+        rootNode = nodeData;
+        renderInitialTree();
+    } else {
+        addNodeToTree(nodeData);
+    }
+}
+
+function renderInitialTree() {
+    const treeElement = renderTree(rootNode, {
         width: window.innerWidth,
         height: 600,
         k: 2,
         depth: 7,
         fill: "#3498db",
         stroke: "#2980b9"
-      });
-      //main_ui.innerHTML = treeElement.outerHTML
-      main_ui.innerHTML = "";
-      main_ui.style.overflow = "auto";
-      main_ui.appendChild(treeElement);
-
+    });
+    
+    const main_ui = document.getElementById('tree-container');
+    main_ui.innerHTML = "";
+    main_ui.style.overflow = "auto";
+    main_ui.appendChild(treeElement);
 }
 
+function addNodeToTree(nodeData) {
+    // Find the parent node and add the new node as a child
+    function findAndAddNode(node) {
+        if (node.text === nodeData.text.slice(0, -nodeData.disp_text.length)) {
+            if (!node.children) node.children = [];
+            node.children.push(nodeData);
+            return true;
+        }
+        if (node.children) {
+            for (let child of node.children) {
+                if (findAndAddNode(child)) return true;
+            }
+        }
+        return false;
+    }
 
+    findAndAddNode(rootNode);
+
+    // Re-render the tree
+    renderInitialTree();
+}
 
 function renderTree(rootNode, {
     tree = d3.tree,
@@ -49,6 +124,9 @@ function renderTree(rootNode, {
     haloWidth = 3,
     curve = d3.curveBumpX,
   } = {}) {
+    const treeContainer = document.getElementById('tree-container');
+    console.log("tree container", treeContainer)
+    treeContainer.innerHTML = ''; // Clear existing content
     const root = d3.hierarchy(rootNode, d => d.children);
   
     // Compute the layout.
@@ -130,8 +208,8 @@ function renderTree(rootNode, {
   
   
       
-  
-    return svg.node();
+    return svg.node()
+    //treeContainer.appendChild(svg.node());
   }
 
 
@@ -210,4 +288,14 @@ console.log(json_data['row_names'])
 renderTokens(attribution_scores, json_data['row_names']);
 
 
+}
+
+
+const example_button_1 = document.getElementById('example-1')
+const example_button_2 = document.getElementById('example-2')
+const example_button_3 = document.getElementById('example-3')
+example_button_1.addEventListener('click', function() {get_tree(example_button_1.innerHTML)})
+example_button_2.addEventListener('click', function() {get_tree(example_button_2.innerHTML)})
+example_button_3.addEventListener('click', function() {get_tree(example_button_3.innerHTML)})
+//example_button_1.onclick = function() {get_tree('Once upon a time there was')}}
 }

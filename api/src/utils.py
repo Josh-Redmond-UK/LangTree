@@ -75,3 +75,16 @@ def attribute_node(input_text, node_text, model):
     attribution_payload = {"col_names": column_names, "row_names": row_names,"data": vals}
 
     return json.dumps(attribution_payload)
+
+async def tree_dfs_async(root, model, tokenizer, k=5, max_depth=20):
+    if root.depth >= max_depth:
+        return
+
+    new_texts = get_next_topk_beams(root.text, model, tokenizer, 2, k)
+    for t in new_texts:
+        child = treeNode(t, root.depth+1, new_tokens=t[len(root.text):])
+        root.add_child(child)
+        yield child
+        
+        async for descendant in tree_dfs_async(child, model, tokenizer, k, max_depth):
+            yield descendant

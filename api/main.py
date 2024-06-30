@@ -1,9 +1,12 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, WebSocket
+from fastapi.websockets import WebSocketDisconnect
+import asyncio
 from src.utils import *
 from transformers import  GPT2Tokenizer, GPT2Model, GPT2LMHeadModel
 import inseq
 from fastapi.middleware.cors import CORSMiddleware
 from mangum import Mangum
+import time
 
 #default globals
 global tokenizer_string
@@ -73,3 +76,17 @@ def update_paarams(tokenizer_string, model_string):
         raise HTTPException(status_code=422, detail="Invalid parameters")
 
 
+@app.websocket("/ws/tree")
+async def websocket_endpoint(websocket: WebSocket, text: str, k: int, max_depth: int):
+    await websocket.accept()
+    print("web socket accepted")
+    root_node = treeNode(text, new_tokens=text)
+    await websocket.send_json({"type": "node", "data": tree_to_dict(root_node)})
+    print("sent first node")
+    async for node in tree_dfs_async(root_node, model, tokenizer, k=int(k), max_depth=int(max_depth)):
+        await websocket.send_json({"type": "node", "data": tree_to_dict(node)})
+        print(node)
+        await asyncio.sleep(0.01)
+        print(f'sent node at {time.time()}')
+
+    await websocket.send_json({"type": "complete"})
