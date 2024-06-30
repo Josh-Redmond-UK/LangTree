@@ -18,7 +18,7 @@ tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
 model = GPT2LMHeadModel.from_pretrained(model_string)
 attribution_model = inseq.load_model(model, "saliency")
 
-
+print("app loaded1 ")
 
 app = FastAPI()
 
@@ -31,7 +31,7 @@ origins = [
 
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=origins,
+    allow_origins=['*'],
     allow_credentials=True,
     allow_methods=["*"],
     allow_headers=["*"],
