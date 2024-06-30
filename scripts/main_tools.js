@@ -26,6 +26,8 @@ async function get_tree(text) {
     socket.onopen = function(e) {
         console.log("WebSocket connection established");
         socket.addEventListener("message", (event) => {console.log("received message using listener")})
+        const input_section = document.getElementById('text-container');
+        input_section.style.display = 'none';
 
 
     };
@@ -72,8 +74,6 @@ function updateTree(nodeData) {
 
 function renderInitialTree() {
     const treeElement = renderTree(rootNode, {
-        width: window.innerWidth,
-        height: 600,
         k: 2,
         depth: 7,
         fill: "#3498db",
@@ -109,109 +109,90 @@ function addNodeToTree(nodeData) {
 }
 
 function renderTree(rootNode, {
-    tree = d3.tree,
-    k = 2,
-    depth = 2,
-    width = 640,
-    height = 1200,
-    r = 3,
-    padding = 1,
-    fill = "#999",
-    stroke = "#555",
-    strokeWidth = 1.5,
-    strokeOpacity = 0.4,
-    halo = "#fff",
-    haloWidth = 3,
-    curve = d3.curveBumpX,
-  } = {}) {
-    const treeContainer = document.getElementById('tree-container');
-    console.log("tree container", treeContainer)
-    treeContainer.innerHTML = ''; // Clear existing content
-    const root = d3.hierarchy(rootNode, d => d.children);
-  
-    // Compute the layout.
-    const dx = 20;
-    const dy = width / (root.height + padding);
-    console.log("dy", dy)
-    console.log("root height", root.height)
-    tree().nodeSize([dx, dy])(root);
-  
-    // Center the tree.
-    let x0 = Infinity;
-    let x1 = -x0;
-    root.each(d => {
-      if (d.x > x1) x1 = d.x;
-      if (d.x < x0) x0 = d.x;
-    });
-  
-    // Compute the default height.
-    if (height === undefined) height = x1 - x0 + dx * 2;
-  
-    // Use the required curve
-    if (typeof curve !== "function") throw new Error(`Unsupported curve`);
-  
-    const svg = d3.create("svg")
-      .attr("viewBox", [-dy * padding / 2, x0 - dx, width, (31)*(k**(depth+1))])
-      .attr("style", "max-width: 100%; height: auto; overflow: auto;")
-      .attr("font-family", "sans-serif")
-      .attr("font-size", 10)
-      .style("overflow-x", "auto")
-      .style("white-space", "nowrap")
-      .style("overflow", "auto")
-      //.style("width", "100%")
-      //.style("height", "600px");
-    console.log("height", (k**(depth)))
-  
-    svg.append("g")
-      .attr("fill", "none")
-      .attr("stroke", stroke)
-      .attr("stroke-opacity", strokeOpacity)
-      .attr("stroke-width", strokeWidth)
-      .selectAll("path")
-      .data(root.links())
-      .join("path")
-      .attr("d", d3.link(curve)
-        .x(d => d.y)
-        .y(d => d.x));
-  
-    const node = svg.append("g")
-      .selectAll("g")
-      .data(root.descendants())
-      .join("g")
-      .attr("transform", d => `translate(${d.y},${d.x})`)
+  tree = d3.tree,
+  k = 2,
+  depth = 2,
+  padding = 1,
+  r = 3,  // Add this back in
+  fill = "#999",
+  stroke = "#555",
+  strokeWidth = 1.5,
+  strokeOpacity = 0.4,
+  halo = "#fff",
+  haloWidth = 3,
+  curve = d3.curveBumpX,
+} = {}) {
+  const treeContainer = document.getElementById('tree-container');
+  treeContainer.innerHTML = ''; // Clear existing content
+  const root = d3.hierarchy(rootNode, d => d.children);
 
-  
-    node.append("circle")
-      .attr("fill", d => d.children ? stroke : fill)
-      .attr("r", r)
-  
-    const text = node.append("text")
-      .attr("dy", "0.32em")
-      .attr("x", d => d.children ? -6 : 6)
-      .attr("text-anchor", d => d.children ? "end" : "start")
-      .attr("paint-order", "stroke")
-      .attr("stroke", halo)
-      .attr("stroke-width", haloWidth)
-      .style("pointer-events", "all")
-      .text(d => d.data.disp_text)
-      .on("click", (event, d) => {
-        // Callback function when a node's text is clicked
-        console.log("Clicked node text:", d.data.text);
-        console.log("Y location:", d.y);
-        console.log("x location:", d.x);
+  // Compute the layout without fixed dimensions
+  const dx = 20;
+  const dy = 180; // Adjust this value to control horizontal spacing
+  tree().nodeSize([dx, dy])(root);
 
+  // Calculate the bounds of the tree
+  let x0 = Infinity;
+  let x1 = -x0;
+  let y0 = Infinity;
+  let y1 = -y0;
+  root.each(d => {
+    if (d.x > x1) x1 = d.x;
+    if (d.x < x0) x0 = d.x;
+    if (d.y > y1) y1 = d.y;
+    if (d.y < y0) y0 = d.y;
+  });
 
-        attribute_text(user_text, d.data.text)
+  // Calculate the dimensions of the SVG
+  const width = y1 - y0 + dy * 2;
+  const height = x1 - x0 + dx * 2;
 
-    });
+  const svg = d3.create("svg")
+    .attr("viewBox", [y0 - dy, x0 - dx, width, height])
+    .attr("style", "width: 100%; height: auto; overflow: visible;")
+    .attr("font-family", "sans-serif")
+    .attr("font-size", 10);
 
-  
-  
-      
-    return svg.node()
-    //treeContainer.appendChild(svg.node());
-  }
+  svg.append("g")
+    .attr("fill", "none")
+    .attr("stroke", stroke)
+    .attr("stroke-opacity", strokeOpacity)
+    .attr("stroke-width", strokeWidth)
+    .selectAll("path")
+    .data(root.links())
+    .join("path")
+    .attr("d", d3.link(curve)
+      .x(d => d.y)
+      .y(d => d.x));
 
+  const node = svg.append("g")
+    .selectAll("g")
+    .data(root.descendants())
+    .join("g")
+    .attr("transform", d => `translate(${d.y},${d.x})`);
+
+  node.append("circle")
+    .attr("fill", d => d.children ? stroke : fill)
+    .attr("r", r);  // Now this should work correctly
+
+  const text = node.append("text")
+    .attr("dy", "0.32em")
+    .attr("x", d => d.children ? -6 : 6)
+    .attr("text-anchor", d => d.children ? "end" : "start")
+    .attr("paint-order", "stroke")
+    .attr("stroke", halo)
+    .attr("stroke-width", haloWidth)
+    .style("pointer-events", "all")
+    .text(d => d.data.disp_text)
+    .on("click", (event, d) => {
+      console.log("Clicked node text:", d.data.text);
+      console.log("Y location:", d.y);
+      console.log("x location:", d.x);
+      attribute_text(user_text, d.data.text);
+  });
+
+  return svg.node();
+}
 
 
   function renderTokens(data, tokens) {
