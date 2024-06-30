@@ -3,11 +3,11 @@ FROM --platform=linux/amd64 python:3
 
 WORKDIR /app
 
-COPY requirements.txt .
+COPY api/requirements.txt .
 
-RUN pip install -r requirements.txt
+RUN pip install -r api/requirements.txt
 
-COPY . . 
+COPY api . 
 
 EXPOSE 8080
 
