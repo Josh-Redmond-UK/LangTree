@@ -1,6 +1,5 @@
 fastapi
 transformers[cpu]
 inseq
-mangum
 pandas
 numpy

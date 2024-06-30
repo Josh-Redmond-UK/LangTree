@@ -5,7 +5,6 @@ from src.utils import *
 from transformers import  GPT2Tokenizer, GPT2LMHeadModel
 import inseq
 from fastapi.middleware.cors import CORSMiddleware
-from mangum import Mangum
 import time
 
 #default globals
@@ -37,8 +36,6 @@ app.add_middleware(
     allow_methods=["*"],
     allow_headers=["*"],
 )
-
-handler = Mangum(app)
  
 
 valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-community/gpt2']}
