@@ -21,7 +21,7 @@ async function get_tree(text) {
     }
 
     // Create a new WebSocket connection
-    socket = new WebSocket(`ws://127.0.0.1:8000/ws/tree?text=${encodeURIComponent(text)}&k=${k}&max_depth=${depth}`);
+    socket = new WebSocket(`ws:https://hammerhead-app-82aq3.ondigitalocean.app/ws/tree?text=${encodeURIComponent(text)}&k=${k}&max_depth=${depth}`);
 
     socket.onopen = function(e) {
         console.log("WebSocket connection established");
