@@ -10,16 +10,16 @@ from fastapi.middleware import Middleware
 
 
 #default globals
-#global tokenizer_string
-#global model_string#
-#global #tokenizer
-#global model
-#tokenizer_string = 'openai-community/gpt2'
-#model_string = 'openai-community/gpt2'
-#tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
-#model = GPT2LMHeadModel.from_pretrained(model_string)
-#attribution_model = inseq.load_model(model, "saliency")
-#valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-community/gpt2']}
+global tokenizer_string
+global model_string
+global tokenizer
+global model
+tokenizer_string = 'openai-community/gpt2'
+model_string = 'openai-community/gpt2'
+tokenizer = GPT2Tokenizer.from_pretrained(tokenizer_string)
+model = GPT2LMHeadModel.from_pretrained(model_string)
+attribution_model = inseq.load_model(model, "saliency")
+valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-community/gpt2']}
 
 
 
