@@ -7,6 +7,7 @@ import inseq
 from fastapi.middleware.cors import CORSMiddleware
 import time
 from fastapi.middleware import Middleware
+from fastapi.staticfiles import StaticFiles
 
 
 #default globals
@@ -36,6 +37,7 @@ middleware = [
 
 
 app = FastAPI(middleware=middleware)
+app.mount("../static", StaticFiles(directory="static"), name="static")
 
 print("app loaded!")
 
