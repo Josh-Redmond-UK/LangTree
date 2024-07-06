@@ -21,7 +21,7 @@ async function get_tree(text) {
     }
 
     // Create a new WebSocket connection
-    socket = new WebSocket(`wss:hammerhead-app-82aq3.ondigitalocean.app/langtree-api2/ws/tree`);
+    socket = new WebSocket(`ws:hammerhead-app-82aq3.ondigitalocean.app/langtree-api2/ws/tree`);
 
     socket.onopen = function(e) {
         console.log("WebSocket connection established");
