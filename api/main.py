@@ -28,10 +28,10 @@ valid_params = {'models':['openai-community/gpt2'], 'tokenizers':['openai-commun
 middleware = [
     Middleware(
         CORSMiddleware,
-        allow_origins=['*', 'https://josh-redmond-uk.github.io', 'https://josh-redmond-uk.github.io/'],
+        allow_origins=["*"],  # Or specify your frontend origin
         allow_credentials=True,
-        allow_methods=['*'],
-        allow_headers=['*']
+        allow_methods=["*"],
+        allow_headers=["*"],
     )]
 
 
@@ -78,18 +78,23 @@ def update_params(tokenizer_string, model_string):
 
 @app.websocket("/ws/tree")
 async def websocket_endpoint(websocket: WebSocket, text: str, k: int, max_depth: int):
-    await websocket.accept()
-    print("web socket accepted")
-    while True:
-        data = await websocket.receive_text()
-        print(data)
-        root_node = treeNode(text, new_tokens=text)
-        await websocket.send_json({"type": "node", "data": tree_to_dict(root_node)})
-        print("sent first node")
-        async for node in tree_dfs_async(root_node, model, tokenizer, k=int(k), max_depth=int(max_depth)):
-            await websocket.send_json({"type": "node", "data": tree_to_dict(node)})
-            print(node)
-            await asyncio.sleep(0.01)
-            print(f'sent node at {time.time()}')
+    print(f"WebSocket connection attempt from {websocket.client}")
+    try:
+        await websocket.accept()
+        print("web socket accepted")
+        while True:
+            data = await websocket.receive_text()
+            print(data)
+            root_node = treeNode(text, new_tokens=text)
+            await websocket.send_json({"type": "node", "data": tree_to_dict(root_node)})
+            print("sent first node")
+            async for node in tree_dfs_async(root_node, model, tokenizer, k=int(k), max_depth=int(max_depth)):
+                await websocket.send_json({"type": "node", "data": tree_to_dict(node)})
+                print(node)
+                await asyncio.sleep(0.01)
+                print(f'sent node at {time.time()}')
 
-        await websocket.send_json({"type": "complete"})
+            await websocket.send_json({"type": "complete"})
+    except Exception as e:
+        print(f"Error accepting WebSocket connection: {e}")
+        raise e 
